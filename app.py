@@ -13,7 +13,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'itbytes'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
-name=""
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -55,9 +54,6 @@ class LoginForm(FlaskForm):
                              InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
 
     submit = SubmitField('Login')
-    global name
-    name = username
-
 
 @app.route('/')
 def home():
@@ -72,9 +68,10 @@ def login():
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
+                with open("filename.txt","w") as f:
+                    f.write(str(form.username.data))
                 return redirect(url_for('dashboard'))
-            with open("filename.txt","w") as f:
-                f.write(str(name))
+            
             
     return render_template('login.html', form=form)
 
