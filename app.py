@@ -107,6 +107,7 @@ def dashboard():
     add_form = AddContactForm()
     edit_form = EditContactForm()
     delete_form = DeleteContactForm()
+    searched_contacts = None
 
     if request.method == 'POST':
         if 'add_contact' in request.form and add_form.validate():
@@ -145,9 +146,19 @@ def dashboard():
                 flash('Contact deleted successfully!', 'success')
             else:
                 flash('Contact not found or you are not authorized to delete this contact.', 'danger')
+        # Search contacts
+        search_term = request.form.get('search_term', '').lower()
+        if search_term:
+            searched_contacts = Contact.query.filter(
+                (Contact.name.ilike(f"%{search_term}%") |
+                 Contact.phone_number.ilike(f"%{search_term}%") |
+                 Contact.email.ilike(f"%{search_term}%") |
+                 Contact.second_phone_number.ilike(f"%{search_term}%")) &
+                (Contact.user_id == current_user.id)
+            ).all()
 
     contacts = Contact.query.filter_by(user_id=current_user.id).all()
-    return render_template('dashboard.html', username=current_user.username.title(), contacts=contacts, add_form=add_form, edit_form=edit_form, delete_form=delete_form)
+    return render_template('dashboard.html', username=current_user.username.title(), contacts=contacts, add_form=add_form, edit_form=edit_form, delete_form=delete_form, searched_contacts=searched_contacts)
 
 
 @app.route('/logout', methods=['GET', 'POST'])

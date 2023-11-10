@@ -18,7 +18,7 @@
 
         h1, h2 {
             color: #333;
-            text-align: center;
+            text-align: left; /* Align left */
         }
 
         ul {
@@ -137,6 +137,17 @@
             justify-content: space-around;
             align-items: flex-start;
         }
+
+        /* Added styles for the search bar */
+        #searchForm {
+            margin-top: 20px;
+            text-align: left;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in-out;
+        }
     </style>
 </head>
 
@@ -144,6 +155,13 @@
     <a href="{{url_for('logout')}}">Logout</a>
     <h1>Dashboard</h1>
     <h2>Hello, {{username}}!</h2>
+
+    <!-- Search Contact Form -->
+    <form id="searchForm" method="post" action="{{ url_for('dashboard') }}">
+        <h2>Search Contacts</h2>
+        <input type="text" name="search_term" placeholder="Enter search term">
+        <input type="submit" value="Search">
+    </form>
 
     <!-- Display Contacts -->
     <table>
@@ -176,13 +194,13 @@
     <form id="addForm" method="post" action="{{ url_for('dashboard') }}">
         {{ add_form.hidden_tag() }}
         <label for="add_name">Name:</label>
-        <input type="text" id="add_name" name="name"><br>
+        <input type="text" id="add_name" name="name" required><br>
         <label for="add_phone_number">Phone Number:</label>
-        <input type="text" id="add_phone_number" name="phone_number"><br>
+        <input type="text" id="add_phone_number" name="phone_number" maxlength="10" required><br>
         <label for="add_email">Email:</label>
-        <input type="text" id="add_email" name="email"><br>
+        <input type="text" id="add_email" name="email" required><br>
         <label for="add_second_phone_number">Second Phone Number:</label>
-        <input type="text" id="add_second_phone_number" name="second_phone_number"><br>
+        <input type="text" id="add_second_phone_number" name="second_phone_number" maxlength="10" required><br>
         <input type="submit" name="add_contact" value="Add Contact">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -197,13 +215,13 @@
     <form id="editForm" method="post" action="{{ url_for('dashboard') }}">
         {{ edit_form.hidden_tag() }}
         <label for="edit_name">Name:</label>
-        <input type="text" id="edit_name" name="name"><br>
+        <input type="text" id="edit_name" name="name" required><br>
         <label for="edit_phone_number">Phone Number:</label>
-        <input type="text" id="edit_phone_number" name="phone_number"><br>
+        <input type="text" id="edit_phone_number" name="phone_number" maxlength="10" required><br>
         <label for="edit_email">Email:</label>
-        <input type="text" id="edit_email" name="email"><br>
+        <input type="text" id="edit_email" name="email" required><br>
         <label for="edit_second_phone_number">Second Phone Number:</label>
-        <input type="text" id="edit_second_phone_number" name="second_phone_number"><br>
+        <input type="text" id="edit_second_phone_number" name="second_phone_number" maxlength="10" required><br>
         <input type="submit" name="edit_contact" value="Edit Contact">
     </form>
 
@@ -211,9 +229,29 @@
     <form id="deleteForm" method="post" action="{{ url_for('dashboard') }}">
         {{ delete_form.hidden_tag() }}
         <label for="delete_name">Name:</label>
-        <input type="text" id="delete_name" name="name"><br>
+        <input type="text" id="delete_name" name="name" required><br>
         <input type="submit" name="delete_contact" value="Delete Contact">
     </form>
+
+    {% if searched_contacts %}
+        <h2>Search Results</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Second Phone Number</th>
+            </tr>
+            {% for contact in searched_contacts %}
+                <tr>
+                    <td>{{ contact.name }}</td>
+                    <td>{{ contact.phone_number }}</td>
+                    <td>{{ contact.email }}</td>
+                    <td>{{ contact.second_phone_number }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
 
     <script>
         function toggleForm() {
