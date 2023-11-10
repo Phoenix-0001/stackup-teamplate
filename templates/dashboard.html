@@ -6,67 +6,224 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+
+    <!-- Add a link to a Google Font for a modern and clean font style -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        form {
+            margin-top: 20px;
+            display: none;
+            text-align: left; /* Align labels to the left */
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            width: 100%;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            float: right;
+            margin-right: 20px;
+            font-weight: bold;
+            border-radius: 5px;
+            padding: 8px 15px;
+            background-color: #007BFF;
+            color: #fff;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        a:hover {
+            text-decoration: none;
+            background-color: #0056b3;
+        }
+
+        p {
+            color: #888;
+        }
+
+        .success-message {
+            color: green;
+        }
+
+        .error-message {
+            color: red;
+        }
+
+        select {
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+        }
+    </style>
 </head>
 
 <body>
-    <h0 style="font-family: Arial; font-weight: bold;">Dashboard</h0>
-    <h1 style="font-family: 'Arial', Times, serif;">Hello, {{username}}! </h1>
-    <br>
+    <a href="{{url_for('logout')}}">Logout</a>
+    <h1>Dashboard</h1>
+    <h2>Hello, {{username}}!</h2>
 
     <!-- Display Contacts -->
-    <h2>Contacts</h2>
-    {% if contacts %}
-        <ul>
-            {% for contact in contacts %}
-                <li>{{ contact.name }} - {{ contact.phone_number }} - {{ contact.email }} - {{ contact.second_phone_number }}</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No contacts available.</p>
-    {% endif %}
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Second Phone Number</th>
+        </tr>
+        {% for contact in contacts %}
+            <tr>
+                <td>{{ contact.name }}</td>
+                <td>{{ contact.phone_number }}</td>
+                <td>{{ contact.email }}</td>
+                <td>{{ contact.second_phone_number }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Dropdown Menu -->
+    <label for="contactAction">Select Action:</label>
+    <select id="contactAction" onchange="toggleForm()">
+        <option value="" disabled selected>------</option>
+        <option value="add">Add Contact</option>
+        <option value="edit">Edit Contact</option>
+        <option value="delete">Delete Contact</option>
+    </select>
 
     <!-- Add Contact Form -->
-    <h2>Add Contact</h2>
-    <form method="post" action="{{ url_for('dashboard') }}">
+    <form id="addForm" method="post" action="{{ url_for('dashboard') }}">
         {{ add_form.hidden_tag() }}
-        {{ add_form.name.label }} {{ add_form.name() }}<br>
-        {{ add_form.phone_number.label }} {{ add_form.phone_number() }}<br>
-        {{ add_form.email.label }} {{ add_form.email() }}<br>
-        {{ add_form.second_phone_number.label }} {{ add_form.second_phone_number() }}<br>
+        <label for="add_name">Name:</label>
+        <input type="text" id="add_name" name="name"><br>
+        <label for="add_phone_number">Phone Number:</label>
+        <input type="text" id="add_phone_number" name="phone_number"><br>
+        <label for="add_email">Email:</label>
+        <input type="text" id="add_email" name="email"><br>
+        <label for="add_second_phone_number">Second Phone Number:</label>
+        <input type="text" id="add_second_phone_number" name="second_phone_number"><br>
         <input type="submit" name="add_contact" value="Add Contact">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    {% if category == 'success' %}
-                        <p style="color: green;">{{ message }}</p>
-                    {% elif category == 'danger' %}
-                        <p style="color: red;">{{ message }}</p>
-                    {% endif %}
+                    <p class="{{ category }}-message">{{ message }}</p>
                 {% endfor %}
             {% endif %}
         {% endwith %}
     </form>
 
     <!-- Edit Contact Form -->
-    <h2>Edit Contact</h2>
-    <form method="post" action="{{ url_for('dashboard') }}">
+    <form id="editForm" method="post" action="{{ url_for('dashboard') }}">
         {{ edit_form.hidden_tag() }}
-        {{ edit_form.name.label }} {{ edit_form.name() }}<br>
-        {{ edit_form.phone_number.label }} {{ edit_form.phone_number() }}<br>
-        {{ edit_form.email.label }} {{ edit_form.email() }}<br>
-        {{ edit_form.second_phone_number.label }} {{ edit_form.second_phone_number() }}<br>
+        <label for="edit_name">Name:</label>
+        <input type="text" id="edit_name" name="name"><br>
+        <label for="edit_phone_number">Phone Number:</label>
+        <input type="text" id="edit_phone_number" name="phone_number"><br>
+        <label for="edit_email">Email:</label>
+        <input type="text" id="edit_email" name="email"><br>
+        <label for="edit_second_phone_number">Second Phone Number:</label>
+        <input type="text" id="edit_second_phone_number" name="second_phone_number"><br>
         <input type="submit" name="edit_contact" value="Edit Contact">
     </form>
 
     <!-- Delete Contact Form -->
-    <h2>Delete Contact</h2>
-    <form method="post" action="{{ url_for('dashboard') }}">
+    <form id="deleteForm" method="post" action="{{ url_for('dashboard') }}">
         {{ delete_form.hidden_tag() }}
-        {{ delete_form.name.label }} {{ delete_form.name() }}<br>
+        <label for="delete_name">Name:</label>
+        <input type="text" id="delete_name" name="name"><br>
         <input type="submit" name="delete_contact" value="Delete Contact">
     </form>
 
-    <a href="{{url_for('logout')}}">Press here to logout</a>
+    <script>
+        function toggleForm() {
+            var action = document.getElementById("contactAction").value;
+
+            document.getElementById("addForm").style.display = (action === "add") ? "block" : "none";
+            document.getElementById("editForm").style.display = (action === "edit") ? "block" : "none";
+            document.getElementById("deleteForm").style.display = (action === "delete") ? "block" : "none";
+        }
+    </script>
 </body>
 
 </html>
