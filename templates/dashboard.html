@@ -52,7 +52,6 @@
 
         form {
             margin-top: 20px;
-            display: none;
             text-align: left; /* Align labels to the left */
             background-color: #fff;
             padding: 20px;
@@ -159,7 +158,7 @@
     <!-- Search Contact Form -->
     <form id="searchForm" method="post" action="{{ url_for('dashboard') }}">
         <h2>Search Contacts</h2>
-        <input type="text" name="search_term" placeholder="Enter search term">
+        <input type="text" name="search_term" placeholder="Enter a name to search">
         <input type="submit" value="Search">
     </form>
 
@@ -191,16 +190,16 @@
     </select>
 
     <!-- Add Contact Form -->
-    <form id="addForm" method="post" action="{{ url_for('dashboard') }}">
+    <form id="addForm" method="post" action="{{ url_for('dashboard') }}" style="display: none;">
         {{ add_form.hidden_tag() }}
         <label for="add_name">Name:</label>
         <input type="text" id="add_name" name="name" required><br>
         <label for="add_phone_number">Phone Number:</label>
         <input type="text" id="add_phone_number" name="phone_number" maxlength="10" required><br>
         <label for="add_email">Email:</label>
-        <input type="text" id="add_email" name="email" required><br>
+        <input type="text" id="add_email" name="email"><br>
         <label for="add_second_phone_number">Second Phone Number:</label>
-        <input type="text" id="add_second_phone_number" name="second_phone_number" maxlength="10" required><br>
+        <input type="text" id="add_second_phone_number" name="second_phone_number" maxlength="10"><br>
         <input type="submit" name="add_contact" value="Add Contact">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -212,7 +211,7 @@
     </form>
 
     <!-- Edit Contact Form -->
-    <form id="editForm" method="post" action="{{ url_for('dashboard') }}">
+    <form id="editForm" method="post" action="{{ url_for('dashboard') }}" style="display: none;">
         {{ edit_form.hidden_tag() }}
         <label for="edit_name">Name:</label>
         <input type="text" id="edit_name" name="name" required><br>
@@ -226,7 +225,7 @@
     </form>
 
     <!-- Delete Contact Form -->
-    <form id="deleteForm" method="post" action="{{ url_for('dashboard') }}">
+    <form id="deleteForm" method="post" action="{{ url_for('dashboard') }}" style="display: none;">
         {{ delete_form.hidden_tag() }}
         <label for="delete_name">Name:</label>
         <input type="text" id="delete_name" name="name" required><br>
