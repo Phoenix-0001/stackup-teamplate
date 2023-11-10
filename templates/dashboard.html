@@ -9,8 +9,59 @@
 </head>
 
 <body>
-    <h1 style="font-family: Arial; font-weight: bold;">Hello you are logged in.</h1>
+    <h0 style="font-family: Arial; font-weight: bold;">Dashboard</h0>
+    <h1 style="font-family: 'Arial', Times, serif;">Hello, {{username}}! </h1>
+    <br><!-- Display Contacts -->
+    <h2>Contacts</h2>
+    <ul>
+        {% for contact in contacts %}
+            <li>{{ contact.name }} - {{ contact.phone_number }} - {{ contact.email }} - {{ contact.second_phone_number }}</li>
+        {% endfor %}
+    </ul>
+    
+    <!-- Add Contact Form -->
+    <h2>Add Contact</h2>
+    <form method="post" action="{{ url_for('dashboard') }}">
+        {{ add_form.hidden_tag() }}
+        {{ add_form.name.label }} {{ add_form.name() }}<br>
+        {{ add_form.phone_number.label }} {{ add_form.phone_number() }}<br>
+        {{ add_form.email.label }} {{ add_form.email() }}<br>
+        {{ add_form.second_phone_number.label }} {{ add_form.second_phone_number() }}<br>
+        <input type="submit" name="add_contact" value="Add Contact">
+    </form>
+    
+    <!-- Edit Contact Form -->
+    <h2>Edit Contact</h2>
+    <form method="post" action="{{ url_for('dashboard') }}">
+        {{ edit_form.hidden_tag() }}
+        {{ edit_form.name.label }} {{ edit_form.name() }}<br>
+        {{ edit_form.phone_number.label }} {{ edit_form.phone_number() }}<br>
+        {{ edit_form.email.label }} {{ edit_form.email() }}<br>
+        {{ edit_form.second_phone_number.label }} {{ edit_form.second_phone_number() }}<br>
+        <input type="submit" name="edit_contact" value="Edit Contact">
+    </form>
+    
+    <!-- Delete Contact Form -->
+    <h2>Delete Contact</h2>
+    <form method="post" action="{{ url_for('dashboard') }}">
+        {{ delete_form.hidden_tag() }}
+        <input type="submit" name="delete_contact" value="Delete Contact">
+    </form>
+    
+    
+
     <a href="{{url_for('logout')}}">Press here to logout</a>
 </body>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class="flashes">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
 
 </html>

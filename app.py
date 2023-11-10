@@ -1,9 +1,9 @@
-from flask import Flask, render_template, url_for, redirect
+from flask import Flask, render_template, url_for, redirect, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, ValidationError
+from wtforms.validators import InputRequired, Length, ValidationError, Optional
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
@@ -27,6 +27,34 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
+    contacts = db.relationship('Contact', backref='user', lazy=True)
+
+class Contact(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    name = db.Column(db.String(50), nullable=False)
+    phone_number = db.Column(db.String(10), nullable=False)
+    email = db.Column(db.String(50))
+    second_phone_number = db.Column(db.String(10))
+
+    user_relation = db.relationship('User', backref=db.backref('contacts', lazy=True))
+
+
+
+class AddContactForm(FlaskForm):
+    name = StringField('Name', validators=[InputRequired(), Length(max=50)])
+    phone_number = StringField('Phone Number', validators=[InputRequired(), Length(max=10)])
+    email = StringField('Email', validators=[Optional(), Length(max=50)])
+    second_phone_number = StringField('Second Phone Number', validators=[Optional(), Length(max=10)])
+
+class EditContactForm(FlaskForm):
+    name = StringField('Name', validators=[InputRequired(), Length(max=50)])
+    phone_number = StringField('Phone Number', validators=[InputRequired(), Length(max=10)])
+    email = StringField('Email', validators=[Optional(), Length(max=50)])
+    second_phone_number = StringField('Second Phone Number', validators=[Optional(), Length(max=10)])
+
+class DeleteContactForm(FlaskForm):
+    pass  
 
 
 class RegisterForm(FlaskForm):
@@ -55,6 +83,9 @@ class LoginForm(FlaskForm):
 
     submit = SubmitField('Login')
 
+
+
+
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -68,8 +99,6 @@ def login():
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
-                with open("filename.txt","w") as f:
-                    f.write(str(form.username.data))
                 return redirect(url_for('dashboard'))
             
             
@@ -79,7 +108,34 @@ def login():
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    add_form = AddContactForm()
+    edit_form = EditContactForm()
+    delete_form = DeleteContactForm()
+
+    if request.method == 'POST':
+        if 'add_contact' in request.form and add_form.validate():
+            new_contact = Contact(
+                name=add_form.name.data,
+                phone_number=add_form.phone_number.data,
+                email=add_form.email.data,
+                second_phone_number=add_form.second_phone_number.data
+            )
+            db.session.add(new_contact)
+            db.session.commit()
+            flash('Contact added successfully!', 'success')
+
+        elif 'edit_contact' in request.form and edit_form.validate():
+            # Implement logic to edit contact
+            flash('Contact edited successfully!', 'success')
+
+        elif 'delete_contact' in request.form and delete_form.validate():
+            # Implement logic to delete contact
+            flash('Contact deleted successfully!', 'success')
+
+    contacts = Contact.query.all()
+    return render_template('dashboard.html', username=current_user.username.title(), contacts=contacts, add_form=add_form, edit_form=edit_form, delete_form=delete_form)
+
+
 
 
 @app.route('/logout', methods=['GET', 'POST'])
