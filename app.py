@@ -7,8 +7,6 @@ from wtforms.validators import InputRequired, Length, ValidationError, Optional
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
-
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'itbytes'
 db = SQLAlchemy(app)
@@ -29,6 +27,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80), nullable=False)
     contacts = db.relationship('Contact', backref='user', lazy=True)
 
+
 class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -37,8 +36,7 @@ class Contact(db.Model):
     email = db.Column(db.String(50))
     second_phone_number = db.Column(db.String(10))
 
-    user_relation = db.relationship('User', backref=db.backref('contacts', lazy=True))
-
+    user_relation = db.relationship('User', backref=db.backref('user_contacts', lazy=True))
 
 
 class AddContactForm(FlaskForm):
@@ -47,14 +45,16 @@ class AddContactForm(FlaskForm):
     email = StringField('Email', validators=[Optional(), Length(max=50)])
     second_phone_number = StringField('Second Phone Number', validators=[Optional(), Length(max=10)])
 
+
 class EditContactForm(FlaskForm):
     name = StringField('Name', validators=[InputRequired(), Length(max=50)])
     phone_number = StringField('Phone Number', validators=[InputRequired(), Length(max=10)])
     email = StringField('Email', validators=[Optional(), Length(max=50)])
     second_phone_number = StringField('Second Phone Number', validators=[Optional(), Length(max=10)])
 
+
 class DeleteContactForm(FlaskForm):
-    pass  
+    name = StringField('Name', validators=[InputRequired(), Length(max=50)])
 
 
 class RegisterForm(FlaskForm):
@@ -84,8 +84,6 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 
-
-
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -96,12 +94,10 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if user:
-            if bcrypt.check_password_hash(user.password, form.password.data):
-                login_user(user)
-                return redirect(url_for('dashboard'))
-            
-            
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user)
+            return redirect(url_for('dashboard'))
+
     return render_template('login.html', form=form)
 
 
@@ -115,6 +111,7 @@ def dashboard():
     if request.method == 'POST':
         if 'add_contact' in request.form and add_form.validate():
             new_contact = Contact(
+                user_id=current_user.id,
                 name=add_form.name.data,
                 phone_number=add_form.phone_number.data,
                 email=add_form.email.data,
@@ -125,17 +122,32 @@ def dashboard():
             flash('Contact added successfully!', 'success')
 
         elif 'edit_contact' in request.form and edit_form.validate():
-            # Implement logic to edit contact
-            flash('Contact edited successfully!', 'success')
+            contact_name_to_edit = request.form.get('name')
+            contact_to_edit = Contact.query.filter_by(name=contact_name_to_edit, user_id=current_user.id).first()
+
+            if contact_to_edit:
+                contact_to_edit.phone_number = edit_form.phone_number.data
+                contact_to_edit.email = edit_form.email.data
+                contact_to_edit.second_phone_number = edit_form.second_phone_number.data
+
+                db.session.commit()
+                flash('Contact edited successfully!', 'success')
+            else:
+                flash('Contact not found or you are not authorized to edit this contact.', 'danger')
 
         elif 'delete_contact' in request.form and delete_form.validate():
-            # Implement logic to delete contact
-            flash('Contact deleted successfully!', 'success')
+            contact_name_to_delete = request.form.get('name')
+            contact_to_delete = Contact.query.filter_by(name=contact_name_to_delete, user_id=current_user.id).first()
 
-    contacts = Contact.query.all()
+            if contact_to_delete:
+                db.session.delete(contact_to_delete)
+                db.session.commit()
+                flash('Contact deleted successfully!', 'success')
+            else:
+                flash('Contact not found or you are not authorized to delete this contact.', 'danger')
+
+    contacts = Contact.query.filter_by(user_id=current_user.id).all()
     return render_template('dashboard.html', username=current_user.username.title(), contacts=contacts, add_form=add_form, edit_form=edit_form, delete_form=delete_form)
-
-
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -145,7 +157,7 @@ def logout():
     return redirect(url_for('login'))
 
 
-@ app.route('/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
 
