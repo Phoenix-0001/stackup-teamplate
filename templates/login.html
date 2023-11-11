@@ -7,53 +7,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
-/* Rounded rectangular input fields */
-input[type="text"],
-input[type="password"] {
-    width: 60%;
-    padding: 10px;
-    margin: 10px auto;
-    border: 1px solid #ccc;
-    border-radius: 7px;
-    outline: none;
-}
+        body {
+            background: url('https://www.toptal.com/designers/subtlepatterns/uploads/y-so-serious-white.png') repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-/* Style the submit buttons */
-input[type="submit"] {
-    display: block;
-    width: 20%;
-    padding: 10px;
-    margin: 10px auto;
-    text-align: center;
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    border-radius: 7px;
-    cursor: pointer
-    
-}
+        .login-container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            width: 40%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-input[type="submit"]:hover {
-    background-color: #0056b3;
-}
-body{
-    background: url('https://www.toptal.com/designers/subtlepatterns/uploads/y-so-serious-white.png') repeat;
-}
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            outline: none;
+            box-sizing: border-box;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        input[type="text"]:hover,
+        input[type="password"]:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        h1 {
+            font-family: Arial;
+            color: #000;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        a:hover {
+            color: #0056b3;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 
 <body>
-    <h1 style="font-family: Arial;">Login Page</h1>
-    
+    <div class="login-container">
+        <h1>Login Page</h1>
 
-    <form method="POST" action="">
-        {{ form.hidden_tag() }}
-        {{ form.username }}
-        {{ form.password }}
-        {{ form.submit }}
-    </form>
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <input type="text" name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="Password">
+            <input type="submit" value="Login">
+        </form>
 
-    <a href="{{ url_for('register') }}">Don't have an account? Sign Up</a>
+        <a href="{{ url_for('register') }}">Don't have an account? Sign Up</a>
+    </div>
 </body>
 
 </html>
