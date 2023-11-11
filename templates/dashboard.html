@@ -168,6 +168,7 @@
     </form>
 
     <!-- Display Contacts -->
+    <br>
     <table>
         <tr>
             <th>Name</th>
@@ -193,6 +194,14 @@
         <option value="edit">Edit Contact</option>
         <option value="delete">Delete Contact</option>
     </select>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <p class="{{ category }}-message">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 
     <!-- Add Contact Form -->
     <form id="addForm" method="post" action="{{ url_for('dashboard') }}" style="display: none;">
@@ -206,13 +215,6 @@
         <label for="add_second_phone_number">Second Phone Number:</label>
         <input type="text" id="add_second_phone_number" name="second_phone_number" maxlength="10"><br>
         <input type="submit" name="add_contact" value="Add Contact">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <p class="{{ category }}-message">{{ message }}</p>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
     </form>
 
     <!-- Edit Contact Form -->
