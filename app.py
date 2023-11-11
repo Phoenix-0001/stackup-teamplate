@@ -5,6 +5,15 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError, Optional
 from flask_bcrypt import Bcrypt
+from app import app, db
+
+# Create an application context
+app.app_context().push()
+
+# Create the database tables
+db.create_all()
+
+# You can add other database-related commands here
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
