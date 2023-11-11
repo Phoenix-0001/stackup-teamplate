@@ -7,7 +7,7 @@ from wtforms.validators import InputRequired, Length, ValidationError, Optional
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///https://drive.google.com/file/d/1KIMFPhZGMOYg0kMfrAv0__XBb3yjAGjU/view?usp=sharing'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'itbytes'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
@@ -183,5 +183,5 @@ def register():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False,'0.0.0.0')
 
