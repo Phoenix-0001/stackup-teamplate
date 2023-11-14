@@ -2,9 +2,9 @@
 # Contact Manager App
 This is a project to create a contact manager app. This app currently works offline and runs from the browser. 
 ## Team members
-1. Adwaidh Payattuparambil [https://github.com/Phoenix-0001]
-2. Ikramul Haque [https://github.com/Ikram205]
-3. Sreehari PS [https://github.com/Sreehari-P-S-10]
+1. Adwaidh Payattuparambil [https://github.com/Phoenix-0001] -Worked on frontend and backend
+2. Sreehari PS [https://github.com/Sreehari-P-S-10] -Video ideas
+3. Ikramul Haque [https://github.com/Ikram205]
 4. Abhinand Ullas [https://github.com/Abhinandul]
 ## Team Id
 it-bytes
