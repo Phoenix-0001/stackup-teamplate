@@ -1,6 +1,6 @@
 ![StackUp Banner]([https://tinkerhub.frappe.cloud/files/stackup%20banner.jpeg])
-# Contact Manager Web App
-This is a project to create a contact manager web app
+# Contact Manager App
+This is a project to create a contact manager app. This app currently works offline and runs from the browser. 
 ## Team members
 1. Adwaidh Payattuparambil [https://github.com/Phoenix-0001]
 2. Ikramul Haque [https://github.com/Ikram205]
@@ -9,13 +9,21 @@ This is a project to create a contact manager web app
 ## Team Id
 it-bytes
 ## Link to product walkthrough
-[link to video]
+[[[link to video](https://www.youtube.com/watch?v=byVtSbxttvo)]]
 ## How it Works ?
-1. Explaining the working of project
-2. Embed video of project demo
+1. The data will be stored locally on database.db file in the folder where the zip file is extracted
+2. [[link to video](https://www.youtube.com/watch?v=byVtSbxttvo)]
 ## Libraries used
-Library Name - Version
-## How to configure
-Instructions for setting up project
+1. Flask
+2. WTForms
+3. SQLAlchemy
+## Prerequisite
+1. Python
+2. Any web browser
+## How to Configure
+1. Download the project folder (https://github.com/Phoenix-0001/stackup-teamplate/archive/refs/heads/master.zip)
+2. Extract the contents of the file and open a terminal in the same directory as app.py
+3. Run pip install -r requirements command in the terminal and wait for it to finish installing
 ## How to Run
-Instructions for running
+1. Simply double click the app.py file.
+2. Open the http://127.0.0.1:5000/ link on the browser.
