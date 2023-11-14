@@ -27,3 +27,6 @@ it-bytes
 ## How to Run
 1. Simply double click the app.py file.
 2. Open the http://127.0.0.1:5000/ link on the browser.
+## Plans to work on in future
+1) To cloudhost this website and make it globally accessible. This requires buying/ renting a vps server.
+2) To introduce other features like forgot password, exporting to csv file and the ability to share contacts with a single button.
