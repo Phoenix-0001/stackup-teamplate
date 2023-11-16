@@ -1,6 +1,6 @@
 ![StackUp Banner]([https://tinkerhub.frappe.cloud/files/stackup%20banner.jpeg])
 # Contact Manager App
-This is a project to create a contact manager app. This app currently works offline and runs from the browser. 
+This is a project to create a contact manager app. This app currently works offline and runs from the browser. This app can also work online, but since it has been set up on a free plan of render it is not possible to enable it fulltime. Do contact via adwaidh845@gmail.com for me to enable the online host
 ## Team members
 1. Adwaidh Payattuparambil [https://github.com/Phoenix-0001] -Worked on frontend and backend
    (https://drive.google.com/file/d/1TPDZSDF9kPiTMDnvO93IJy1ihUkpoNfq/view?usp=drive_link)
