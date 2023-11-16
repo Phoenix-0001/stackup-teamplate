@@ -20,11 +20,11 @@ it-bytes
 3. SQLAlchemy
 ## Prerequisite
 1. Python
-2. Microsoft Visual C++ build tools 14.0 or greater [(https://visualstudio.microsoft.com/visual-cpp-build-tools/)] Make sure to select the required components, including the "Desktop development with C++" workload.
+2. Any Browser
 ## How to Configure
 1. Download the project folder (https://github.com/Phoenix-0001/stackup-teamplate/archive/refs/heads/master.zip)
 2. Extract the contents of the file and open a terminal in the same directory as app.py
-3. Run pip install -r requirements command in the terminal and wait for it to finish installing
+3. Run  [pip install flask flask_sqlalchemy flask_login flask_bcrypt flask_wtf wtforms email_validator] command in the terminal and wait for it to finish installing
 ## How to Run
 1. Simply double click the app.py file.
 2. Open the http://127.0.0.1:5000/ link on the browser.
