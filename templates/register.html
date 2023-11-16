@@ -71,10 +71,6 @@
             color: #000;
         }
 
-        c {
-            color: #888;
-        }
-
         a {
             color: #007BFF;
             text-decoration: none;
@@ -95,8 +91,7 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <input type="text" name="username" placeholder="Username">
-            <input type="password" name="password" placeholder="Password">
-            <c>Password should contain a minimum of 8 charachters</c>
+            <input type="password" name="password" placeholder="Password (minimum 8 charachters)">
             <input type="submit" value="Register">
         </form>
 
