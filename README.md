@@ -20,7 +20,7 @@ it-bytes
 3. SQLAlchemy
 ## Prerequisite
 1. Python
-2. Microsoft Visual C++ build tools 14.0 or greater [(https://visualstudio.microsoft.com/visual-cpp-build-tools/)]
+2. Microsoft Visual C++ build tools 14.0 or greater [(https://visualstudio.microsoft.com/visual-cpp-build-tools/)] Make sure to select the required components, including the "Desktop development with C++" workload.
 ## How to Configure
 1. Download the project folder (https://github.com/Phoenix-0001/stackup-teamplate/archive/refs/heads/master.zip)
 2. Extract the contents of the file and open a terminal in the same directory as app.py
